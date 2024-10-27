@@ -91,3 +91,15 @@ justify-items: center;
   user-select: none;
   -moz-user-select: none;
 }
+
+.login-button{
+  background-color: hsl(240, 33%, 60%);
+  margin: 0.4rem;
+}
+
+.auth-buttons{
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 1rem;
+}

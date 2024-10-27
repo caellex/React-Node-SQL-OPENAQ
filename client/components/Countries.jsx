@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Countries = () => {
+const Countries = ({ data }) => {
   const [backendData, setBackendData] = useState([]);
   const [countries, setCountries] = useState([]);
   const [countrySensors, setCountrySensors] = useState([]);
@@ -9,20 +9,30 @@ const Countries = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/api/countries")
-      .then(response => response.json())
-      .then(data => {
-        setBackendData(data);
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/api/countries");
+        const data = await response.json();
 
-        const names = data.results.map(country => country.name);
-        setCountries(names);
-      });
-      console.log(countries)
+        if (data && data.results) {
+          setBackendData(data);
+
+          const names = data.results.map(country => country.name);
+          setCountries(names);
+        } else {
+          console.error("Unexpected API response format", data);
+        }
+      } catch (error) {
+        console.error("Error fetching countries: " + error);
+      }
+    };
+
+    fetchCountries();
   }, []);
 
-    const handleClick = (countryId) => {
-        navigate('/countries/' + countryId);
-    }
+  const handleClick = (key) => {
+    navigate(`/countries/${key}`);
+  };
 
   return (
     <>
@@ -33,7 +43,20 @@ const Countries = () => {
           {countries.map((country, i) => {
             const key = (backendData.results[i] && backendData.results[i].id !== 'undefined' ? backendData.results[i].id : i);
 
-            return ( <p className="country-name" key={key} onClick={() => handleClick(key)}><img className="country-flag-icon" src={`https://flagsapi.com/${backendData.results[i].code}/flat/64.png`} alt="Flag not found" />{country}</p>)
+            return (
+              <p
+                className="country-name"
+                key={key}
+                onClick={() => handleClick(key)}
+              >
+                <img
+                  className="country-flag-icon"
+                  src={`https://flagsapi.com/${backendData.results[i].code}/flat/64.png`}
+                  alt="Flag not found"
+                />
+                {country}
+              </p>
+            );
           })}
         </div>
       )}
