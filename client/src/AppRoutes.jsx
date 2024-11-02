@@ -5,6 +5,7 @@ import Countries from '../components/Countries'
 import Home from '../pages/Home';
 import Sensors from '../components/Sensors';
 import MainLayout from '../pages/MainLayout';
+import Measurements from '../components/Measurements';
 
 
 const AppRoutes = () => {
@@ -17,6 +18,7 @@ const AppRoutes = () => {
             <Route path="/countries" element={<Countries/>} />
             <Route path="*" element={<Home />} />
             <Route path="/countries/:countryId" element={<Sensors />} />
+            <Route path="/countries/:countryId/:locationId" element={<Measurements />} />
           </Routes>
         </div>
       );

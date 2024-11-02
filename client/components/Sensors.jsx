@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 const Sensors = () => {
     const { countryId } = useParams();
     const [sensors, setSensors] = useState([]);
+    const [waitForResultsCount, setWaitForResultsCount] = useState("60")
+    const navigate = useNavigate();
 
     useEffect(() => {
         const findCountrySensors = async (countryId) => {
@@ -12,27 +14,46 @@ const Sensors = () => {
                 return;
             }
 
-            fetch(`http://127.0.0.1:5000/api/countries/search?countryId=${countryId}`)
-                .then(response => response.json())
-                .then(data => {
-
-                    const sensorResults = data.results || [];
-
-                    setSensors(sensorResults);
-                    console.log(data)
-                }).catch(error => console.error("Error fetching sensors: " + error))
+            const response = await fetch(`http://127.0.0.1:5000/api/countries/sensors?countryId=${countryId}`)
+            const data = await response.json()
+            const sensorResults = data.results || [];
+            setSensors(sensorResults);
+                
 
         }
         findCountrySensors(countryId);
     }, [countryId]
     )
+
+    // Countdown for user if the data doesn't load properly. Sometimes it can take up to a minute for sensors to load. Long live OpenAQ-
+    useEffect(() => {
+        if(sensors.length === 0){
+            const countdown = setInterval(() => {
+                setWaitForResultsCount((prevCount) => {
+                    if(prevCount > 0){
+                        return prevCount - 1;
+                    } else {
+                        clearInterval(countdown);
+                        return 60;
+                    }
+                });
+            }, 1000)
+            return () => clearInterval(countdown);
+        }
+        
+    }, [sensors])
+
+    const handleClick = (key) => {
+        navigate(`/countries/${countryId}/${key}`);
+      };
+
     return (
         <>
             <h2 className="center">Sensors in Country ID: {countryId}</h2>
-            <div className="column-wrap">
+            <div className={sensors && sensors.length > 0 ? "column-wrap" : ""}>
                 {sensors && sensors.length > 0 ? (
                     sensors.map(sensor => (
-                        <div key={sensor.id} className="sensor-item">
+                        <div key={sensor.id} className="sensor-item" onClick={() => handleClick(sensor.id)}>
                             <p className="column-name">{sensor.name}</p>
                             <p className={sensor.locality !== null ? "specified-loc" : "not-found"}>
                                 {sensor.locality !== null ? sensor.locality : "Specified location not found."}
@@ -40,7 +61,11 @@ const Sensors = () => {
                         </div>
                     ))
                 ) : (
-                    <p className="center">No sensors found.</p>
+                    <>
+                    <p className="center header-error">No sensors found.</p>
+                    <p className="center description-error">Wait up to a minute, if the sensors still haven't loaded they are currently unavaliable.</p>
+                    <div className="counter">{waitForResultsCount}</div>
+                    </>
                 )}
             </div>
         </>
