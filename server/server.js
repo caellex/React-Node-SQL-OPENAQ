@@ -91,7 +91,7 @@ app.get('/api/location/search', async (req, res) => {
     } 
 });
 
-// SEARCH FOR MEASUREMENTS FROM SPECIFIED SENSORS IN LOCATION
+// SEARCH FOR MEASUREMENTS FROM SPECIFIED SENSORS IN LOCATIONN
 app.get('/api/location/sensor', async (req, res) => {
   const { sensorId } = req.query;
   console.log("Sensor ID searched: ", sensorId)
