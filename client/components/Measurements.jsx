@@ -8,6 +8,10 @@ const Measurements = () => {
     const [location, setLocation] = useState([])
     const [sensorIds, setSensorIds] = useState([])
 
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() - 2)
+    let isoDate = currentDate.toISOString();
+
     useEffect(() => {
       const fetchLocationData = async () => {
         const response = await fetch(`http://127.0.0.1:5000/api/location/search?locationId=${locationId}`);
@@ -19,11 +23,21 @@ const Measurements = () => {
         const sensorsResults = data.results[0]?.sensors?.map(sensor => sensor.id);
         setSensorIds(sensorsResults)
         
-        console.log(location)
       }
 
       fetchLocationData()
     }, [locationId])
+
+    const ConvertDate = (dateToFormat) => {
+      if(dateToFormat){
+          let latestDate = dateToFormat.split('T')[0];
+          let tempTime = dateToFormat.split('T')[1];
+          let latestTime = tempTime.split(/[+-.]/)[0];
+  
+          let time = latestDate + " " + latestTime;
+          return time;
+      }
+    }
 
   return (
     <div className="measurements-overview-wrap"> 
@@ -31,29 +45,14 @@ const Measurements = () => {
       <img className="sensor-map" src={mapPlaceholder} />
 
       <p className="latest-measure-title">LATEST MEASUREMENTS: </p>
-      <p className="latest-measure-when">Last update: 2024-10-30 12:00:00:00</p>
+      <p className="latest-measure-when">Last update: {ConvertDate(isoDate)}</p>
 
       <div className="latest-measurements">
 
-        <div className="measure">
-          <p>PM10 μg/m³</p>
-          <p>RESULT</p>
-          </div>
+{sensorIds.map(sensor => <Sensor key={sensor} id={sensor} />)}
 
-        <div className="measure">
-          <p>PM2.5 μg/m³ </p>
-          <p>RESULT</p>
-          </div>
-
-        <div className="measure">
-          <p>NO₂ μg/m³ </p>
-          <p>RESULT</p>
-          </div>
-
-
+<button className="save-button" onClick={() => console.log("Saved location. (Not really)")}>Save Location</button>
       </div>
-      <button onClick={() => console.log(sensorIds)}>LOG</button>
-      <button onClick={() => console.log(location)}>LOG</button>
       </div>
   )
 }

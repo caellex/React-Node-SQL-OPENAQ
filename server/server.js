@@ -93,16 +93,14 @@ app.get('/api/location/search', async (req, res) => {
 
 // SEARCH FOR MEASUREMENTS FROM SPECIFIED SENSORS IN LOCATIONN
 app.get('/api/location/sensor', async (req, res) => {
-  const { sensorId } = req.query;
+  const { sensorId, datetime_from } = req.query;
   console.log("Sensor ID searched: ", sensorId)
-  
-
   if(!sensorId){
     // do some error handling
   }
   try{
       
-      const response = await fetch(`https://api.openaq.org/v3/sensors/${sensorId}/measurements`, {
+      const response = await fetch(`https://api.openaq.org/v3/sensors/${sensorId}/measurements?datetime_from${datetime_from}`, {
           method: 'GET',
           headers: {
             'X-API-Key': apiKey

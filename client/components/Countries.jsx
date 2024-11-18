@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Countries = ({ data }) => {
+const Countries = () => {
   const [backendData, setBackendData] = useState([]);
   const [countries, setCountries] = useState([]);
-  const [countrySensors, setCountrySensors] = useState([]);
 
   const navigate = useNavigate();
 

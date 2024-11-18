@@ -1,36 +1,63 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from "react";
 
+const Sensor = ({id}) => {
+  const [sensor, setSensor] = useState([]);
+  const [success, setSuccess] = useState(false);
 
-const Sensor = ({ sensorIds }) => {
-    const [sensorData, setSensorData] = useState([]);
+  useEffect(() => {
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() - 2)
+    const isoDate = currentDate.toISOString();
+    const fetchSensorData = async () => {
+      try {
 
-    useEffect(() => {
-        const fetchSensorData = async (id) => {
-            const response = await fetch(`http://127.0.0.1:5000/api/location/sensor?sensorId=${id}`)
-            const data = await response.json()
-            return data;
+        const response = await fetch(
+          `http://127.0.0.1:5000/api/location/sensor?sensorId=${id}?datetime_from=${isoDate}`
+        );
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch sensor. Response ${response.status}`
+          );
         }
+        const data = await response.json();
+        if(data.results[0]) setSensor(data.results[0]);
+        setSuccess(true);
 
-        const fetchAllSensors = async () => {
-            try {
-                const dataPromises = sensorIds.map(id => fetchSensorData(id));
-                const results = await Promise.all(dataPromises)
+      } catch (e) {
+        console.error("Error fetching Sensor with ID ${id} \n", e);
+      }
+    };
+    fetchSensorData();
+  }, [id]);
 
-                setSensorData(results)
-                
-            } catch (error){
-                console.error("Error fetching sensor data: ", error)
-            }
-        }
-        fetchAllSensors()
-    }, [sensorIds])
-  return (
-    <div className="sensor-overview">
-        {sensorData.map((data, index) => {
-            <p key={index} onClick={console.log(data.results[4])}>{data.results[0]}</p>
-        })}
-    </div>
-  )
+  function formatSensorName(name){
+    const conversionMap = {
+        "CO MG/M³": "CO μg/m³",
+        "NO2 ΜG/M³": "NO₂ μg/m³",
+        "O3 ΜG/M³": "O₃ μg/m³",
+        "PM10 ΜG/M³": "PM₁₀ μg/m³",
+        "PM25 ΜG/M³": "PM₂.₅ μg/m³",
+        "SO2 ΜG/M³": "SO₂ μg/m³"
+    }
+
+    return conversionMap[name] || name
 }
+  return (
+    <>
+      {success ? (
+        <div className="measure">
+          <p className="measure-unit">{formatSensorName(sensor.name.toUpperCase())}</p>
+          <p className="measure-value">{sensor.latest.value.toFixed(2)} μg/m³</p>
+          {/* <button onClick={() => console.log(sensor.name.toUpperCase())}>Log</button> */}
+        </div>
+        
+      ) : (
+        "Sensor did not load correctly."
+      )}
+    </>
+  );
+};
 
-export default Sensor
+export default Sensor;
+
+

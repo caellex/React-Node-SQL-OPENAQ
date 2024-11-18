@@ -160,6 +160,7 @@ body {
 
 .latest-measurements{
   justify-self:center;
+  justify-items: center;
 }
 
 .measure{
@@ -167,4 +168,9 @@ body {
   flex-direction: row;
   gap: 5rem;
   justify-content: space-between;
+}
+
+.save-button{
+  margin-top: 2em;
+  background-color: hsl(240, 33%, 60%);
 }
