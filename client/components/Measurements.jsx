@@ -4,6 +4,7 @@ import Sensor from './Sensor';
 import mapPlaceholder from '../src/assets/map-place.jpg'
 import MainLayout from '../pages/MainLayout'
 import LocationMap from './LocationMap';
+import BounceLoader from "react-spinners/BounceLoader";
 
 const Measurements = () => {
   const { locationId } = useParams();
@@ -17,6 +18,8 @@ const Measurements = () => {
     currentDate.setHours(currentDate.getHours() + 1)
     let isoDate = currentDate.toISOString();
 
+
+
     useEffect(() => {
       const fetchLocationData = async () => {
         try{
@@ -28,9 +31,10 @@ const Measurements = () => {
           
           const sensorsResults = data.results[0]?.sensors?.map(sensor => sensor.id);
           setSensorIds(sensorsResults)
+          setIsLoadingMap(false)
 
           if (locationResults[0]?.coordinates) {
-            setIsLoadingMap(false);
+            
           }
         }catch(e){
           console.error(`Error fetching sensor data`, e)
@@ -65,7 +69,14 @@ const Measurements = () => {
 
 <div className="measurements-overview-wrap"> 
       <h2 className="sensor-location">{location[0] ? location[0].locality : "N/A"}, {location[0] ? location[0].name : "N/A"}</h2>
-      {isLoadingMap ? <img src={mapPlaceholder} alt="Map loading..." style={{ width: '100%', height: 'auto' }} /> : <LocationMap lng={location[0]?.coordinates?.longitude} lat={location[0]?.coordinates?.latitude}/>}
+      {isLoadingMap ? <BounceLoader
+        loading={isLoadingMap}
+        color="#8484cc"
+        cssOverride={{margin: '2em 0 2em 0'}}
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      /> : <LocationMap lng={location[0]?.coordinates?.longitude} lat={location[0]?.coordinates?.latitude}/>}
       <button type="submit" className="save-button" onClick={() => console.log("Saved location. (Not really)")}>Save Location</button>
 
       <p className="latest-measure-title">LATEST MEASUREMENTS: </p>

@@ -15,6 +15,7 @@ const LocationMap = (coords) => {
     justifySelf: 'center',
     border: '0.6rem solid #7777BB',
     borderRadius: '1rem',
+    color: 'black',
   };
 
   useEffect(() => {
@@ -26,6 +27,15 @@ const LocationMap = (coords) => {
         center: [coords.lng, coords.lat], 
         zoom: 13 // starting zoom
       });
+
+      const popup = new mapboxgl.Popup().setText(
+        'Sensors are located here.'
+      );
+
+      new mapboxgl.Marker({color: 'red', rotation: 15})
+      .setLngLat([coords.lng, coords.lat])
+      .setPopup(popup)
+      .addTo(mapRef.current);
 
       setIsLoaded(true);
     }
