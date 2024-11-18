@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MainLayout from '../pages/MainLayout';
 
 const Countries = () => {
   const [backendData, setBackendData] = useState([]);
@@ -35,6 +36,7 @@ const Countries = () => {
 
   return (
     <>
+    <MainLayout pageTitle="Countries"/>
       {typeof backendData.results === 'undefined' ? (
         <p>Loading...</p>
       ) : (

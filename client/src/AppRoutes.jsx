@@ -12,7 +12,6 @@ const AppRoutes = () => {
 
       return (
         <div>
-          <MainLayout />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/countries" element={<Countries/>} />

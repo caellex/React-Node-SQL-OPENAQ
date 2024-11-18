@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import MainLayout from '../pages/MainLayout';
 
 const Sensors = () => {
     const { countryId } = useParams();
@@ -49,6 +50,7 @@ const Sensors = () => {
 
     return (
         <>
+        <MainLayout pageTitle={sensors[0]?.country?.name} />
             <h2 className="center">Sensors in Country ID: {countryId}</h2>
             <div className={sensors && sensors.length > 0 ? "column-wrap" : ""}>
                 {sensors && sensors.length > 0 ? (

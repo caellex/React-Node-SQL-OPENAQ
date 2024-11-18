@@ -1,0 +1,69 @@
+.error-container {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #a88931;
+    border-radius: 5px;
+    background-color: #a15259;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 100px auto;
+  }
+  
+  .error-title {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+  }
+  
+  .error-message {
+    font-size: 1.2em;
+  }
+  
+  .error-contact {
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .error-email {
+    color: #fff;
+    text-decoration: underline;
+    margin-right: 5px;
+    font-weight: bold;
+  }
+  
+  .email-icon {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer; 
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #a15259;
+    transition: all 0.3s ease;
+  }
+  
+  .icon {
+    width: 25px;
+    height: auto;
+    margin-right: 5px;
+  }
+  
+  .icon.clicked {
+    filter: brightness(0) invert(1);
+  }
+  
+  .error-email:hover {
+    text-decoration: none;
+  }
+  
+  .email-icon:hover {
+    background-color: #a15259;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+  }
+  
+  .email-icon:hover .icon {
+    filter: brightness(0.8); 
+  }
+  
