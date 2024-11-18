@@ -30,16 +30,14 @@ const Countries = () => {
     fetchCountries();
   }, []);
 
-  const handleClick = (key) => {
+  const goToPage = (key) => {
     navigate(`/countries/${key}`);
   };
 
   return (
     <>
     <MainLayout pageTitle="Countries"/>
-      {typeof backendData.results === 'undefined' ? (
-        <p>Loading...</p>
-      ) : (
+    
         <div className="column-wrap">
           {countries.map((country, i) => {
             const key = (backendData.results[i] && backendData.results[i].id !== 'undefined' ? backendData.results[i].id : i);
@@ -48,7 +46,7 @@ const Countries = () => {
               <p
                 className="country-name"
                 key={key}
-                onClick={() => handleClick(key)}
+                onClick={() => goToPage(key)}
               >
                 <img
                   className="country-flag-icon"
@@ -60,7 +58,6 @@ const Countries = () => {
             );
           })}
         </div>
-      )}
     </>
   );
 };

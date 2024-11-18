@@ -14,6 +14,8 @@ const MainLayout = ({pageTitle}) => {
 
     const isActive = (path) => location.pathname === path ? 'active' : '';
 
+    const isHome = (path) => location.pathname === path ? true : false;
+
     useEffect(() => {
         if(pageTitle){
             setTitle(pageTitle)
@@ -24,7 +26,8 @@ const MainLayout = ({pageTitle}) => {
 
     return (
         <div>
-            {isLoggedIn ? "" : <AuthButtons />}
+            {isHome('/') ?  
+            (isLoggedIn ? '' : <AuthButtons />) : ""}
             <h1 className="center page-title">{title ? title : "Air Quality Monitoring"}</h1>
             <div className="header-buttons">
                 <button className={`center-button ${isActive('/')}`} onClick={() => goToPage('/')}>Home</button>

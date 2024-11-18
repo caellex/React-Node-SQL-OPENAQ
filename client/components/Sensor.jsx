@@ -43,7 +43,7 @@ const Sensor = ({id}) => {
         "SO2 PPM" : "SO₂ PPM",
         "PM1 ΜG/M³" : "PM₁ µg/m³",
         "RELATIVEHUMIDITY %" : "Humidity",
-        "TEMPERATURE C" : "Temperature C°",
+        "TEMPERATURE C" : "Temperature °C",
         "UM003 PARTICLES/CM³" : "UM₀₀₃ particles/cm³",
     }
 

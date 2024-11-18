@@ -6,24 +6,25 @@ import MainLayout from '../pages/MainLayout'
 import LocationMap from './LocationMap';
 import BounceLoader from "react-spinners/BounceLoader";
 
-const Measurements = () => {
+const LocationInfo = () => {
   const { locationId } = useParams();
     const [location, setLocation] = useState([]);
     const [sensorIds, setSensorIds] = useState([]);
-    const [country, setCountry] = useState("");
-    const [map, setMap] = useState(null);
     const [isLoadingMap, setIsLoadingMap] = useState(true);
 
     const currentDate = new Date();
     currentDate.setHours(currentDate.getHours() + 1)
     let isoDate = currentDate.toISOString();
 
-
-
     useEffect(() => {
       const fetchLocationData = async () => {
         try{
           const response = await fetch(`http://127.0.0.1:5000/api/location/search?locationId=${locationId}`);
+          if (!response.ok) {
+            throw new Error(
+              `Failed to fetch sensor. Response ${response.status}`
+            );
+          } else {
           const data = await response.json()
           const locationResults = data.results || [];
 
@@ -32,26 +33,15 @@ const Measurements = () => {
           const sensorsResults = data.results[0]?.sensors?.map(sensor => sensor.id);
           setSensorIds(sensorsResults)
           setIsLoadingMap(false)
-
-          if (locationResults[0]?.coordinates) {
-            
           }
         }catch(e){
           console.error(`Error fetching sensor data`, e)
         }
-
-        
-
-
-        
-
-        
       }
-
       fetchLocationData();
-    }, [locationId])
+    }, [])
     
-    const ConvertDate = (dateToFormat) => {
+     const ConvertDate = (dateToFormat) => {
       if(dateToFormat){
           let latestDate = dateToFormat.split('T')[0];
           let tempTime = dateToFormat.split('T')[1];
@@ -68,7 +58,7 @@ const Measurements = () => {
     <MainLayout pageTitle={location[0]?.country?.name} />
 
 <div className="measurements-overview-wrap"> 
-      <h2 className="sensor-location">{location[0] ? location[0].locality : "N/A"}, {location[0] ? location[0].name : "N/A"}</h2>
+      <h2 className="sensor-location">{location[0]?.locality ? location[0].locality : "Unspecified"}, {location[0]?.name ? location[0].name : "N/A"}</h2>
       {isLoadingMap ? <BounceLoader
         loading={isLoadingMap}
         color="#8484cc"
@@ -87,10 +77,10 @@ const Measurements = () => {
 {sensorIds.map((sensor, i) => <Sensor key={i} id={sensor} />)}
 
 
-      </div>
-      </div>
+      </div> {/*LATEST CLOSER*/}
+      </div> {/*OVERVIEW WRAP CLOSER*/}
       </>
   )
 }
 
-export default Measurements
+export default LocationInfo

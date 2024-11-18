@@ -10,9 +10,33 @@ body {
 
 .column-wrap {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-
+  grid-template-columns: repeat(8, 1fr);
 }
+
+@media (max-width: 1280px) {
+  .column-wrap {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .column-wrap {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .column-wrap {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .column-wrap {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 
 .center {
   display: flex;
@@ -167,8 +191,9 @@ body {
 .measure{
   display: flex;
   flex-direction: row;
-  gap: 5rem;
+  justify-self: flex-start;
   justify-content: space-between;
+  width: 22rem;
 }
 
 .save-button{

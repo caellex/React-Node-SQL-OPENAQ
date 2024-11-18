@@ -4,8 +4,7 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-route
 import Countries from '../components/Countries'
 import Home from '../pages/Home';
 import CountrySensors from '../components/CountrySensors';
-import MainLayout from '../pages/MainLayout';
-import Measurements from '../components/Measurements';
+import LocationInfo from '../components/LocationInfo';
 
 
 const AppRoutes = () => {
@@ -17,7 +16,7 @@ const AppRoutes = () => {
             <Route path="/countries" element={<Countries/>} />
             <Route path="*" element={<Home />} />
             <Route path="/countries/:countryId" element={<CountrySensors />} />
-            <Route path="/countries/:countryId/:locationId" element={<Measurements />} />
+            <Route path="/countries/:countryId/:locationId" element={<LocationInfo />} />
           </Routes>
         </div>
       );
