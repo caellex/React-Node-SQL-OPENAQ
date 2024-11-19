@@ -6,6 +6,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 const LocationMap = (coords) => {
   const [isLoaded, setIsLoaded] = useState(false)
+  const [hasCrashed, setHasCrashed] = useState(false)
   const mapContainerRef = useRef();
   const mapRef = useRef();
 
@@ -19,6 +20,7 @@ const LocationMap = (coords) => {
   };
 
   useEffect(() => {
+    if(!mapContainerRef.current || !coords) setHasCrashed(true)
     if (mapContainerRef.current) {
       mapboxgl.accessToken = 'pk.eyJ1IjoiY2FlbGxleCIsImEiOiJjbTNuOHI5a2sxNHAwMnFxejN3djE2ODQyIn0.uvLrso-puZ6YZ-FJUmNPPg';
 
@@ -39,7 +41,11 @@ const LocationMap = (coords) => {
 
       setIsLoaded(true);
     }
-  }, []);
+  }, [coords]);
+
+  if(hasCrashed) {
+    return <CrashMessage message="Map not loaded correctly." />
+  }
 
 
    return (
@@ -47,11 +53,6 @@ const LocationMap = (coords) => {
       style={sensorMapStyle}
       ref={mapContainerRef}
       className="map-container"
-    />
-  // ) : (
-
-  //   <CrashMessage />
-  // )
-)}
+    />)}
 
 export default LocationMap

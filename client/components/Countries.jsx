@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '../pages/MainLayout';
+import Crash from './CrashMessage'
+import CrashMessage from './CrashMessage';
 
 const Countries = () => {
-  const [backendData, setBackendData] = useState([]);
+  const [countryData, setCountryData] = useState([]);
   const [countries, setCountries] = useState([]);
+  const [hasCrashed, setHasCrashed] = useState(false)
 
   const navigate = useNavigate();
 
@@ -15,20 +18,27 @@ const Countries = () => {
         const data = await response.json();
 
         if (data && data.results) {
-          setBackendData(data);
+          setCountryData(data);
 
           const names = data.results.map(country => country.name);
-          setCountries(names);
+          setCountries(names)
+
         } else {
-          console.error("Unexpected API response format", data);
+          console.error("Unexpected API response", data);
+          setHasCrashed(true)
         }
       } catch (error) {
         console.error("Error fetching countries: " + error);
+        setHasCrashed(true)
       }
     };
 
     fetchCountries();
   }, []);
+
+  if(hasCrashed) {
+    return <CrashMessage message="Could not fetch countries." />
+  }
 
   const goToPage = (key) => {
     navigate(`/countries/${key}`);
@@ -39,8 +49,9 @@ const Countries = () => {
     <MainLayout pageTitle="Countries"/>
     
         <div className="column-wrap">
+          
           {countries.map((country, i) => {
-            const key = (backendData.results[i] && backendData.results[i].id !== 'undefined' ? backendData.results[i].id : i);
+            const key = countryData.results[i]?.id ?? i;
 
             return (
               <p
@@ -50,7 +61,7 @@ const Countries = () => {
               >
                 <img
                   className="country-flag-icon"
-                  src={`https://flagsapi.com/${backendData.results[i].code}/flat/64.png`}
+                  src={`https://flagsapi.com/${countryData.results[i].code}/flat/64.png`}
                   alt="Flag not found"
                 />
                 {country}
@@ -59,7 +70,7 @@ const Countries = () => {
           })}
         </div>
     </>
-  );
+  )
 };
 
 export default Countries;
