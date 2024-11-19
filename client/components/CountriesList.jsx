@@ -4,7 +4,7 @@ import MainLayout from '../pages/MainLayout';
 import Crash from './CrashMessage'
 import CrashMessage from './CrashMessage';
 
-const Countries = () => {
+const CountriesList = () => {
   const [countryData, setCountryData] = useState([]);
   const [countries, setCountries] = useState([]);
   const [hasCrashed, setHasCrashed] = useState(false)
@@ -46,10 +46,6 @@ const Countries = () => {
 
   return (
     <>
-    <MainLayout pageTitle="Countries"/>
-    
-        <div className="column-wrap">
-          
           {countries.map((country, i) => {
             const key = countryData.results[i]?.id ?? i;
 
@@ -68,9 +64,8 @@ const Countries = () => {
               </p>
             );
           })}
-        </div>
     </>
   )
 };
 
-export default Countries;
+export default CountriesList;

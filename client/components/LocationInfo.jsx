@@ -55,9 +55,9 @@ const LocationInfo = () => {
   return (
     <>
     
-    <MainLayout pageTitle={location[0]?.country?.name} />
+    <MainLayout pageTitle={location[0]?.country?.name ? location[0]?.country?.name : " Quality Monitoring"} />
 
-<div className="measurements-overview-wrap"> 
+      <div className="measurements-overview-wrap"> 
       <h2 className="sensor-location">{location[0]?.locality ? location[0].locality : "Unspecified"}, {location[0]?.name ? location[0].name : "N/A"}</h2>
       {isLoadingMap ? <BounceLoader
         loading={isLoadingMap}

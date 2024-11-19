@@ -4,7 +4,7 @@ import MainLayout from '../pages/MainLayout';
 import BarLoader from "react-spinners/BarLoader";
 
 
-const CountrySensors = () => {
+const SensorLocations = ({handleDataFromChild}) => {
     const { countryId } = useParams();
     const [sensors, setSensors] = useState([]);
     const [areSensorsLoading, setAreSensorsLoading] = useState(true);
@@ -31,6 +31,9 @@ const CountrySensors = () => {
 
 
         }
+        if(sensors[0]?.country?.name){
+        handleDataFromChild(sensors[0]?.country?.name)
+      }
         findCountrySensors(countryId);
     }, [countryId]);
 
@@ -40,7 +43,6 @@ const CountrySensors = () => {
 
       return (
         <>
-          <MainLayout pageTitle={sensors[0]?.country?.name} />
           <h2 className="center">{areSensorsLoading ? "Loading Sensors.." : `Sensors in ${sensors[0]?.country?.name}`}</h2>
           <div className={sensors && sensors.length > 0 ? "column-wrap" : ""}>
             {sensors && sensors.length > 0 ? (
@@ -80,4 +82,4 @@ const CountrySensors = () => {
 
 
 
-export default CountrySensors
+export default SensorLocations
